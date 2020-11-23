@@ -35,3 +35,29 @@ led rx pin14 - D10
 ADC
 pin23 pc0 - A0
 ```
+
+# see also
+
+https://zftlab.org/pages/2015012200.html
+
+https://eax.me/sdr-aprs/
+
+http://goryham.qrz.ru/pr/aprs/dir300b1.htm
+
+
+Arduino digi
+
+extdigi, an APRS Digipeater for Arduino - http://extradio.sourceforge.net/extdigi.html
+
+https://github.com/ZS6TVB/Arduino-APRS-Digipeater/tree/master/Software/APRS%20Digi
+
+https://github.com/markqvist/MicroDigi
+
+
+
+Arduino igate
+
+http://hamradioprojects.com/authors/dl8rds/+airgate/
+
+
+
