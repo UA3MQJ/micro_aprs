@@ -36,6 +36,16 @@ ADC
 pin23 pc0 - A0
 ```
 
+
+# photo
+
+![photo](https://github.com/UA3MQJ/micro_arps/blob/master/photo.jpg?raw=true)
+
+![osc1](https://github.com/UA3MQJ/micro_arps/blob/master/osc1.jpg?raw=true)
+
+![osc2](https://github.com/UA3MQJ/micro_arps/blob/master/osc2.jpg?raw=true)
+
+
 # see also
 
 https://zftlab.org/pages/2015012200.html
