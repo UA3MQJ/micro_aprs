@@ -36,6 +36,20 @@ ADC
 pin23 pc0 - A0
 ```
 
+# pro mini board
+
+Board for receive only igate
+
+![photo](https://github.com/UA3MQJ/micro_arps/blob/master/pro_mini.png?raw=true)
+
+![photo](https://github.com/UA3MQJ/micro_arps/blob/master/pro_mini_audioin.png?raw=true)
+
+![photo](https://github.com/UA3MQJ/micro_arps/blob/master/pro_mini_sch.jpg?raw=true)
+
+![photo](https://github.com/UA3MQJ/micro_arps/blob/master/pro_mini_board.jpg?raw=true)
+
+
+
 
 # photo
 
