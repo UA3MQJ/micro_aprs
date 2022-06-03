@@ -1,0 +1,49 @@
+ssh root@192.168.1.1
+1234
+
+cat /proc/mtd
+dev:    size   erasesize  name
+mtd0: 00020000 00010000 "u-boot"
+mtd1: 0011f5c0 00010000 "kernel"
+mtd2: 002b0a40 00010000 "rootfs"
+mtd3: 00080000 00010000 "rootfs_data"
+mtd4: 00010000 00010000 "art"
+mtd5: 003d0000 00010000 "firmware"
+
+scp root@192.168.1.1:/tmp/uboot_backup.bin uboot_backup.bin 
+
+backup u-boot:
+
+cat /dev/mtd0 > /tmp/backup_u-boot.bin
+
+backup art:
+
+cat /dev/mtd4 > /tmp/backup_art.bin
+
+buckup firmware with your settings:
+
+cat /dev/mtd5 > /tmp/backup_firmware.bin
+
+Note:
+This firmware you can flash through the Web interface or the MTD method!
+
+buckup fullflash:
+
+cat /dev/mtd0 > /tmp/backup_fullflash.bin
+cat /dev/mtd5 >> /tmp/backup_fullflash.bin
+cat /dev/mtd4 >> /tmp/backup_fullflash.bin
+
+scp root@192.168.1.1:/tmp/backup_u-boot.bin backup_u-boot.bin 
+scp root@192.168.1.1:/tmp/backup_art.bin backup_art.bin 
+scp root@192.168.1.1:/tmp/backup_firmware.bin backup_firmware.bin 
+scp root@192.168.1.1:/tmp/backup_fullflash.bin backup_fullflash.bin 
+
+ставил
+https://archive.openwrt.org/barrier_breaker/14.07/ar71xx/generic/
+и дальше из моего livejoirnal подключал ext4
+
+scp aprx_2.9.0.-Stable_ar71xx.ipk root@192.168.1.1:/tmp/aprx_2.9.0.-Stable_ar71xx.ipk
+
+screen /dev/ttyUSBCOM 115200
+
+нажимать надо не на клавиатуре, а кнопку на плате роутера. ждать 3 сборка

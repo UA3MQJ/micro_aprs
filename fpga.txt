@@ -1,0 +1,331 @@
+console
+sudo screen /dev/ttyUSB0 115200
+screen /dev/ttyUSBCOM 115200
+
+save log to file ctrl+a shift+h
+
+exit ctrl+a, d -выход но устройство продолжит быть занято
+screen -r вернуться
+а если ctrl+a а затем k - спросит kill session - ответить y и она закроется, девайс освободится
+
+
+./cyclone_ep4ce10.py --cpu-type=picorv32 --cpu-variant=minimal --integrated-rom-size=0x7000 --build --load
+
+serv
+
+./cyclone_ep4ce10.py --cpu-type=vexriscv --cpu-variant=minimal --integrated-rom-size=0x6000 --integrated-main-ram-size=0x2000 --build
+
+./cyclone_ep4ce10.py --cpu-type=vexriscv --cpu-variant=minimal --integrated-rom-size=0x0000
+
+~/risc-v/litex-boards/litex_boards/targets$ rm -r build/cyclone_ep4ce10/
+
+~/risc-v/litex-boards/litex_boards/targets$ quartus build/cyclone_ep4ce10/gateware/cyclone_ep4ce10.qpf
+
+
+quartus /home/sea/risc-v/litex-boards/litex_boards/targets/build/cyclone_ep4ce10/gateware/cyclone_ep4ce10.qpf 
+
+
+rm -r build/colorlight_5a_75b/
+--ecppack-compress
+./colorlight_5a_75x.py --sys-clk-freq 50000000 --board "5a-75e" --revision "6.0" --build --ecppack-compress
+./colorlight_5a_75x.py --sys-clk-freq 50000000 --board "5a-75e" --revision "6.0" --build
+./colorlight_5a_75x.py --load
+
+openFPGALoader -c dirtyJtag colorlight_5a_75e.bit
+sudo /home/sea/fpga-toolchain/bin/openFPGALoader -c dirtyJtag /home/sea/risc-v/litex-boards/litex_boards/targets/build/colorlight_5a_75e/gateware/colorlight_5a_75e.bit -f
+
+программатор - перешил на https://github.com/zoobab/versaloon
+
+export DEVICE="/dev/ttyUSB0"
+$ export FILE="Versaloon-STM32F103C8_BluePill.bin"
+$ docker run --privileged -v $DEVICE:$DEVICE -v $PWD:/mnt zoobab/stm32flash-docker -w /mnt/$FILE -v -g 0x8000000 $DEVICE
+stm32flash 0.5
+
+TDI => GPIO B15
+TDO => GPIO B14
+TCK => GPIO B13
+TMS => GPIO B4
+
+openocd -f my_vsllink.cfg
+sudo /home/sea/opt/xPacks/@xpack-dev-tools/openocd/0.10.0-15.1/.content/bin/openocd -f my_vsllink.cfg
+
+
+мигалка
+sudo /home/sea/fpga-toolchain/bin/openFPGALoader -c dirtyJtag /home/sea/projects/colorlight/color/colorlight_color.bit
+sudo /home/sea/fpga-toolchain/bin/openFPGALoader -c dirtyJtag /home/sea/projects/colorlight/color/colorlight_color.bit -f
+
+
+
+https://raw.githubusercontent.com/kholia/Colorlight-5A-75B/master/BSDLLFE5U25FCABGA256.bsm
+
+sudo jtag
+bsdl path .
+cable dirtyjtag
+detect
+
+IR length: 8
+Chain length: 1
+Device Id: 01000001000100010001000001000011 (0x41111043)
+  Filename:     ./BSDLLFE5U25FCABGA256.bsm
+
+svf ./colorlight_5a_75e.svf ref_freq=1000000
+
+
+
+Info: Device utilisation:
+Info:          TRELLIS_SLICE:  4218/12144    34%
+Info:             TRELLIS_IO:    51/  197    25%
+Info:                   DCCA:     2/   56     3%
+Info:                 DP16KD:    45/   56    80%
+Info:             MULT18X18D:     4/   28    14%
+Info:                 ALU54B:     0/   14     0%
+Info:                EHXPLLL:     1/    2    50%
+Info:                EXTREFB:     0/    1     0%
+Info:                   DCUA:     0/    1     0%
+Info:              PCSCLKDIV:     0/    2     0%
+Info:                IOLOGIC:     4/  128     3%
+Info:               SIOLOGIC:    44/   69    63%
+Info:                    GSR:     0/    1     0%
+Info:                  JTAGG:     0/    1     0%
+Info:                   OSCG:     0/    1     0%
+Info:                  SEDGA:     0/    1     0%
+Info:                    DTR:     0/    1     0%
+Info:                USRMCLK:     0/    1     0%
+Info:                CLKDIVF:     0/    4     0%
+Info:              ECLKSYNCB:     0/   10     0%
+Info:                DLLDELD:     0/    8     0%
+Info:                 DDRDLL:     0/    4     0%
+Info:                DQSBUFM:     0/    8     0%
+Info:        TRELLIS_ECLKBUF:     0/    8     0%
+Info:           ECLKBRIDGECS:     0/    2     0%
+
+Info: Logic utilisation before packing:
+Info:     Total LUT4s:      5527/24288    22%
+Info:         logic LUTs:   4699/24288    19%
+Info:         carry LUTs:    552/24288     2%
+Info:           RAM LUTs:    184/12144     1%
+Info:          RAMW LUTs:     92/ 6072     1%
+
+Info:      Total DFFs:      5384/24288    22%
+
+=== colorlight_5a_75b ===
+
+   Number of wires:               5688
+   Number of wire bits:          28221
+   Number of public wires:        5688
+   Number of public wire bits:   28221
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:               8904
+     CCU2C                         276
+     DP16KD                         42
+     EHXPLLL                         1
+     L6MUX21                       204
+     LUT4                         4699
+     MULT18X18D                      4
+     ODDRX1F                         1
+     PDPW16KD                        3
+     PFUMX                         904
+     TRELLIS_DPR16X4                46
+     TRELLIS_FF                   2692
+     TRELLIS_IO                     32
+
+
+./colorlight_5a_75x.py --cpu-type=serv --cpu-variant=standard  --sys-clk-freq 50000000 --build
+
+Info: Device utilisation:
+Info:          TRELLIS_SLICE:  1999/12144    16%
+Info:             TRELLIS_IO:    51/  197    25%
+Info:                   DCCA:     2/   56     3%
+Info:                 DP16KD:    37/   56    66%
+Info:             MULT18X18D:     0/   28     0%
+Info:                 ALU54B:     0/   14     0%
+Info:                EHXPLLL:     1/    2    50%
+Info:                EXTREFB:     0/    1     0%
+Info:                   DCUA:     0/    1     0%
+Info:              PCSCLKDIV:     0/    2     0%
+Info:                IOLOGIC:     4/  128     3%
+Info:               SIOLOGIC:    44/   69    63%
+Info:                    GSR:     0/    1     0%
+Info:                  JTAGG:     0/    1     0%
+Info:                   OSCG:     0/    1     0%
+Info:                  SEDGA:     0/    1     0%
+Info:                    DTR:     0/    1     0%
+Info:                USRMCLK:     0/    1     0%
+Info:                CLKDIVF:     0/    4     0%
+Info:              ECLKSYNCB:     0/   10     0%
+Info:                DLLDELD:     0/    8     0%
+Info:                 DDRDLL:     0/    4     0%
+Info:                DQSBUFM:     0/    8     0%
+Info:        TRELLIS_ECLKBUF:     0/    8     0%
+Info:           ECLKBRIDGECS:     0/    2     0%
+
+Info: Logic utilisation before packing:
+Info:     Total LUT4s:      2612/24288    10%
+Info:         logic LUTs:   2102/24288     8%
+Info:         carry LUTs:    210/24288     0%
+Info:           RAM LUTs:    200/12144     1%
+Info:          RAMW LUTs:    100/ 6072     1%
+
+Info:      Total DFFs:      2882/24288    11%
+
+=== colorlight_5a_75b ===
+
+   Number of wires:               2873
+   Number of wire bits:          12068
+   Number of public wires:        2873
+   Number of public wire bits:   12068
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:               4170
+     CCU2C                         105
+     DP16KD                         36
+     EHXPLLL                         1
+     L6MUX21                        78
+     LUT4                         2102
+     ODDRX1F                         1
+     PDPW16KD                        1
+     PFUMX                         323
+     TRELLIS_DPR16X4                50
+     TRELLIS_FF                   1441
+     TRELLIS_IO                     32
+
+
+https://community.intel.com/t5/Intel-Quartus-Prime-Software/Nios-II-SBT-Crashing-on-Linux/m-p/1215923?profile.language=ru&countrylabel=Peru
+
+
+cd ..../intelFPGA/20.1/quartus/linux64
+mv jre64 jre64_old
+ln -s /lib/jvm/java-1.8.0-openjdk-amd64/jre jre64
+
+
+
+
+nios_test/nios_test/qsys
+/synthesis/nios_test/qip
+/simulation/nios_test.sip
+
+если ниос не создает проект - сделать его с нуля под одними правами
+можно еще удалить
+~/.cache/dconf
+~/.dbus
+
+установка virtualbox
+https://linux-notes.org/kak-ustanovit-virtualbox-na-centos-fedora/
+
+настройка программатора
+https://radiotech.kz/threads/nastrojka-altera-usb-blaster-v-ubuntu-16-04.1244/
+
+xilinx
+[27896.640436] usb 3-4: USB disconnect, device number 2
+[27899.758380] usb 3-4: new high-speed USB device number 3 using xhci_hcd
+[27899.881551] usb 3-4: New USB device found, idVendor=03fd, idProduct=0013, bcdDevice= 0.00
+[27899.881566] usb 3-4: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+
+altera
+[root@sea-note sea]# udevadm info  /dev/bus/usb/003/014|grep 9fb
+E: ID_VENDOR_ID=09fb
+E: PRODUCT=9fb/6001/400
+[root@sea-note sea]# udevadm info  /dev/bus/usb/003/014|grep 6001
+E: ID_MODEL_ID=6001
+E: PRODUCT=9fb/6001/400
+
+xilinx
+[root@sea-note sea]# udevadm info  /dev/bus/usb/003/013|grep PRODUCT
+E: PRODUCT=3fd/8/0
+[root@sea-note sea]# udevadm info  /dev/bus/usb/003/013|grep ID_MODEL_ID
+E: ID_MODEL_ID=0008
+
+lattice
+[ 7116.573772] usb 3-4: new high-speed USB device number 2 using xhci_hcd
+[ 7116.696945] usb 3-4: New USB device found, idVendor=1134, idProduct=8001, bcdDevice= 0.01
+[ 7116.696954] usb 3-4: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+[sea@sea-note targets]$ udevadm info  /dev/bus/usb/003/002|grep PRODUCT
+E: PRODUCT=1134/8001/1
+[sea@sea-note targets]$ udevadm info  /dev/bus/usb/003/002|grep ID_MODEL_ID
+E: ID_MODEL_ID=8001
+
+
+pl2303
+udevadm info  /dev/bus/usb/003/007|grep PRODUCT
+E: PRODUCT=67b/2303/300
+ID_MODEL_ID=2303
+
+
+
+
+vi /etc/udev/rules.d/51-altera-usb-blaster.rules
+# USB-Blaster
+SUBSYSTEM=="usb", ATTR{idVendor}=="09fb", ATTR{idProduct}=="6001", MODE="0666"
+SUBSYSTEM=="usb", ATTR{idVendor}=="09fb", ATTR{idProduct}=="6002", MODE="0666"
+SUBSYSTEM=="usb", ATTR{idVendor}=="09fb", ATTR{idProduct}=="6003", MODE="0666"
+# USB-Blaster II
+SUBSYSTEM=="usb", ATTR{idVendor}=="09fb", ATTR{idProduct}=="6010", MODE="0666"
+SUBSYSTEM=="usb", ATTR{idVendor}=="09fb", ATTR{idProduct}=="6810", MODE="0666"
+
+# xilinx platform cable
+SUBSYSTEM=="usb", ATTR{idVendor}=="03fd", ATTR{idProduct}=="0008", MODE="0666"
+
+# lattice cabel
+SUBSYSTEM=="usb", ATTR{idVendor}=="1134", ATTR{idProduct}=="8001", MODE="0666"
+
+#pl2303
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="067b", ATTRS{idProduct}=="2303", SYMLINK+="ttyUSBCOM", GROUP="sea", MODE="0666"
+
+# dirty JTAG 
+ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="1209", ATTRS{idProduct}=="c0ca", MODE="0664", GROUP="plugdev"
+
+vi /etc/udev/rules.d/altera-usb-blaster.rules
+# USB-Blaster
+ATTR{idVendor}=="09fb", ATTR{idProduct}=="6001", MODE="666"
+# xilinx platform cable
+ATTR{idVendor}=="03fd", ATTR{idProduct}=="0008", MODE="666"
+# lattice platform cable
+ATTR{idVendor}=="1134", ATTR{idProduct}=="8001", MODE="666"
+#pl2303
+ATTR{idVendor}=="067b", ATTR{idProduct}=="2303", MODE="666"
+
+
+[28440.898509] pl2303 2-1.1:1.0: pl2303 converter detected
+[28440.900289] usb 2-1.1: pl2303 converter now attached to ttyUSB0
+
+udevadm control --reload-rules
+
+ fuser -k 3121/tcp
+
+
+~/risc-v/litex-boards/litex_boards/targets$ rm -r build/ebaz4205/
+~/risc-v/litex-boards/litex_boards/targets$ ./ebaz4205.py --cpu-type=zynq7000 --build
+./zybo_z7.py --cpu-type=zynq7000 --build
+
+
+https://github.com/Disasm/litex-stream
+
+https://www.youtube.com/watch?v=XG_9nfXwfI8
+
+1:24:25 стаскивает мемори мап со своего старого проекта
+1:42:43 начинает приделывать rust и создает папку firmware
+пример wirmware берется из https://github.com/Disasm/icebreaker-rs
+1:58:37 создали файл svd и дальше наполнение firmware
+2:05:48 build litex-pac
+/home/sea/risc-v/firmware/litex-pac cargo build
+ cargo doc --open
+2:07:44 копируем litex-hal
+2:12:15 сборка hal
+2:18:17 копирование прошивки firmware и компиляция
+
+
+w25q128fvsg
+
+1 - /CS                        VCC   - 8
+2 - DO (IO1)   /HOLD or /RESET (IO3) - 7
+3 - /WP (IO2)                  CLK   - 6
+4 - GND           DI (IO0)           - 5
+
+programmer litex
+https://github.com/enjoy-digital/litex/blob/master/litex/build/lattice/programmer.py
+
+sudo rpm -ivh ./diamond_3_12-base-240-2-x86_64-linux.rpm 
+

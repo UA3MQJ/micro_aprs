@@ -1,0 +1,182 @@
+Настройка tplink 3020 для APRS (15.02.2020)
+
+Размера встроенного флена 4мб недостаточно. Раньше можно было
+присоединить USB флеш и перенести на нее /overlays
+но с 15й версией openwrt все весит очень много, поэтому
+драйверов на usb не поставить.
+
+Сначала сохраняю содержимое оригинальной флеши.
+Оригинальные прошивки 4мб флена с опенврт в save
+
+Заходить через ssh
+
+ssh root@192.168.1.1
+1234
+
+Просмотреть разделы,но u-boot на самом деле не 64 а 128
+
+cat /proc/mtd
+dev:    size   erasesize  name
+mtd0: 00020000 00010000 "u-boot"
+mtd1: 0011f5c0 00010000 "kernel"
+mtd2: 002b0a40 00010000 "rootfs"
+mtd3: 00080000 00010000 "rootfs_data"
+mtd4: 00010000 00010000 "art"
+mtd5: 003d0000 00010000 "firmware"
+
+
+Как я сливал родные бекапы через scp
+------------------------------------
+
+backup u-boot:
+
+cat /dev/mtd0 > /tmp/backup_u-boot.bin
+
+backup art:
+
+cat /dev/mtd4 > /tmp/backup_art.bin
+
+buckup firmware with your settings:
+
+cat /dev/mtd5 > /tmp/backup_firmware.bin
+
+Note:
+This firmware you can flash through the Web interface or the MTD method!
+
+buckup fullflash:
+
+cat /dev/mtd0 > /tmp/backup_fullflash.bin
+cat /dev/mtd5 >> /tmp/backup_fullflash.bin
+cat /dev/mtd4 >> /tmp/backup_fullflash.bin
+
+scp root@192.168.1.1:/tmp/backup_u-boot.bin backup_u-boot.bin 
+scp root@192.168.1.1:/tmp/backup_art.bin backup_art.bin 
+scp root@192.168.1.1:/tmp/backup_firmware.bin backup_firmware.bin 
+scp root@192.168.1.1:/tmp/backup_fullflash.bin backup_fullflash.bin 
+
+
+
+ставил
+https://archive.openwrt.org/barrier_breaker/14.07/ar71xx/generic/
+и дальше из моего livejoirnal подключал ext4
+
+scp aprx_2.9.0.-Stable_ar71xx.ipk root@192.168.1.1:/tmp/aprx_2.9.0.-Stable_ar71xx.ipk
+
+но нихрена
+
+В итоге заменял флешку на 16 мб W25Q128 
+
+Делаем как в посте
+http://www.cqham.ru/forum/showthread.php?25810-APRS-%ED%E0-%E1%E0%E7%E5-%EC%E0%F0%F8%F0%F3%F2%E8%E7%E0%F2%EE%F0%EE%E2&p=1330739&viewfull=1#post1330739
+
+Записываем флешку программатором. НО ЕСТЬ НЬЮАНС!!
+В прошивке нужно прописать данные MAC адреса, иначе они будут пустые.
+Получится 00:00:00:00:00:00 мак на wifi и он работать не будет.
+В принципе, проблема решилась сменой мак адреса радио интерфейса в luci.
+Задать MAC можно потом через u-boot если будет нормальный usb-com
+Старую снимать аккуратно, я оторвал ногу
+
+Если пост пропал см
+3020_16M.rar тут
+
+консоль
+screen /dev/ttyUSBCOM 115200
+screen /dev/ttyATH0 9600
+screen /dev/ttyATH0 115200
+
+screen /dev/ttyUSBCOM 9600
+screen /dev/ttyUSB0 9600
+
+Подключение к serial - геморройное с моими pl2303 можно только смотреть
+https://openwrt.org/ru/toh/tp-link/tl-mr3020#%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81_serial
+
+Чтобы зайти в u-boot 
+нажимать надо не на клавиатуре, а кнопку на плате роутера. 
+ждать 3 секунды, после чего по http://192.168.1.1 можно зайти 
+и залить прошивку 15 опенврт
+обязательно прошивать ART чтобы работал wifi - шьется там же
+
+В итоге должно получиться 12 мегабайт свободного основного флеша
+без всяких там usb флешек снаружи
+
+Настройка APRS (aprx)
+=====================
+
+2.9 версия aprx
+
+http://www.cqham.ru/forum/showthread.php?25810-APRS-%ED%E0-%E1%E0%E7%E5-%EC%E0%F0%F8%F0%F3%F2%E8%E7%E0%F2%EE%F0%EE%E2/page13
+
+либо 2.08
+https://www.kissoz.dk/aprx/bin/attitude_adjustment/ar71xx/packages/
+
+
+scp aprx_2.9.0.-Stable_ar71xx.ipk root@192.168.1.1:/tmp/aprx_2.9.0.-Stable_ar71xx.ipk
+или вообще вот так
+scp *.ipk root@192.168.1.1:/tmp
+
+opkg update
+opkg install libpthread
+opkg install kmod-usb-serial-pl2303
+opkg install kmod-usb-serial-ch341  !! для ардуины с CH341
+opkg install kmod-usb-uhci
+opkg install screen
+opkg install aprx_2.08_r596-kissOZ.dk_ar71xx.ipk
+
+cp /etc/aprx.conf.new /etc/aprx.conf
+
+задать интерфейс с ТНЦ и позывным, поставить both
+иначе не будет слать ничего
+
+scp root@192.168.1.1:/etc/aprx.conf aprx.conf 
+
+символы www.aprs.org/symbols/symbols-new.txt
+receive only iGate I&
+
+
+Старые записи по настройке openwrt
+==================================
+
+Все это работает на 14 версии опенврт
+
+opkg update
+opkg install kmod-usb-uhci kmod-usb-storage block-mount kmod-fs-ext4
+insmod usb-ohci
+
+Флешку можно сделать на компьютере
+sudo mkfs.vfat /dev/sdb
+или
+sudo mkfs.ext4 /dev/sdb
+или
+или:
+mkfs.ext2 - EXT2
+mkfs.ext3 - EXT3
+mkfs.ext4 - EXT4
+mkfs.bfs - BFS
+mkfs.msdos - MSDOS
+mkfs.reiserfs - ReiserFS
+mkfs.minix - Minix
+mkfs.ntfs - NTFS
+mkfs.vfat - VFAT (Fat32)
+
+Присоединить к роутеру (либо может быть /mnt/sda)
+mount -t ext4 /dev/sda1 /mnt/sda1 -o rw,sync
+
+Копируем туда установленные пакеты:
+tar -C /overlay -cvf - . | tar -C /mnt/sda1 -xf -
+
+После этого ее надо присоединить поверх /overlay
+
+Дальше настройки должны быть в cat < /etc/config/fstab но через LUCI можно проще настроить
+
+Вернуться к начальной конфигурации можно очистив оверлей
+
+rm -rf /overlay/*
+sync
+reboot
+
+и прочее
+https://seasindream.livejournal.com/13132.html
+
+
+
+
